@@ -21,7 +21,7 @@ import Toast from 'react-native-advanced-toast';
 
 ```
 Toast.configure({
- 	animationTime?: number;
+ 	  animationTime?: number;
     renderInfoIcon?: () => JSX.Element;
     renderSuccessIcon?: () => JSX.Element;
     renderWarningIcon?: () => JSX.Element;
@@ -52,10 +52,10 @@ Toast.showInfo('My toast message', {...options}, 'customId');
 ```
 Possible options:
 ```
- 	duration?: number;
+ 	  duration?: number;
     closable?: boolean;
     textProps?: TextStyle;
-Toast.showInfo('My toast message');    containerStyle?: ViewStyle;
+    containerStyle?: ViewStyle;
     actionButtonText?: string;
     actionButtonStyle?: ViewStyle;
     actionButtonTextStyle?: TextStyle;
