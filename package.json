@@ -1,6 +1,6 @@
 {
     "name": "react-native-advanced-toast",
-    "version": "0.0.12",
+    "version": "0.1.0",
     "main": "./lib/Toast.js",
     "types": "./lib/Toast.d.ts",
     "license": "MIT",
