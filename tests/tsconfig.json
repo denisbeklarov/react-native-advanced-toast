@@ -1,0 +1,26 @@
+{
+    "compilerOptions": {
+        "outDir": "./",
+        "target": "es2015",
+        "module": "es2015",
+        "moduleResolution": "node",
+        "sourceMap": false,
+        "jsx": "react",
+        "noImplicitAny": false,
+        "removeComments": true,
+        "declaration": true,
+        "allowSyntheticDefaultImports": true,
+        "types": [
+            "react",
+            "react-native",
+            "jest"
+        ],
+    },
+    "include": [
+        "./*.tsx",
+        "./*.ts"
+    ],
+    "exclude": [
+        "../node_modules"
+    ]
+}
