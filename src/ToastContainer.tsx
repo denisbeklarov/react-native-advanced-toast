@@ -122,11 +122,11 @@ export default class ToastContainer extends React.Component<ToastContainerProps,
         } else if (type === ToastTypes.ERROR) {
             return this.config.renderErrorIcon ? this.config.renderErrorIcon() : null;
         } else if (type === ToastTypes.WARNING) {
-            return this.config.renderErrorIcon ? this.config.renderWarningIcon() : null;
+            return this.config.renderWarningIcon ? this.config.renderWarningIcon() : null;
         } else if (type === ToastTypes.SUCCESS) {
-            return this.config.renderErrorIcon ? this.config.renderSuccessIcon() : null;
+            return this.config.renderSuccessIcon ? this.config.renderSuccessIcon() : null;
         } else if (type === ToastTypes.INFO) {
-            return this.config.renderErrorIcon ? this.config.renderInfoIcon() : null;
+            return this.config.renderInfoIcon ? this.config.renderInfoIcon() : null;
         }
         return null;
     }
