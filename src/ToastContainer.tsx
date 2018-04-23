@@ -70,6 +70,7 @@ export default class ToastContainer extends React.Component<ToastContainerProps,
     render() {
         const { message, id } = this.props;
         const containerStyle = StyleSheet.flatten([styles.container, this.config.containerStyle, this.props.options.containerStyle]);
+        const textMessageStyle = StyleSheet.flatten([styles.message, this.config.textStyle, this.props.options.textStyles]);
         return (
             <Animated.View style={[{
                 bottom: this.state.appearing ? null : this.state.positionBottom,
@@ -92,7 +93,7 @@ export default class ToastContainer extends React.Component<ToastContainerProps,
                         <View style={styles.icon}>
                             {this.props.options.renderCustomIcon ? this.props.options.renderCustomIcon() : this.renderIcon(this.props.type)}
                         </View>
-                        <Text style={styles.message}>{message}</Text>
+                        <Text style={textMessageStyle}>{message}</Text>
                         {this.renderActionButton()}
                     </TouchableOpacity>
                 </View>

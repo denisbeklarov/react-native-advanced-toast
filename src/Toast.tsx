@@ -32,7 +32,7 @@ export interface ToastConfiguration {
 export interface ToastOptions {
     duration?: number;
     closable?: boolean;
-    textProps?: TextStyle;
+    textStyles?: TextStyle;
     containerStyle?: ViewStyle;
     actionButtonText?: string;
     actionButtonStyle?: ViewStyle;
