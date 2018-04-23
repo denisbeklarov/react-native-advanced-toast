@@ -23,6 +23,7 @@ export default class ToastContainer extends React.Component<ToastContainerProps,
 
     private config = ToastConfigurationHelper.config;
     private animationDuration = this.config.animationTime;
+    private hidingTimer: any;
 
     constructor(props: ToastContainerProps) {
         super(props);
@@ -40,25 +41,33 @@ export default class ToastContainer extends React.Component<ToastContainerProps,
             duration: this.animationDuration,
             easing: Easing.elastic(0.1)
         }).start(() => {
-            console.log('animation finished');
             this.setState({
                 appearing: false
             });
+            this.updateHidingTimer();
         });
+    }
 
-        if (this.props.options.duration && this.props.options.duration > this.animationDuration) {
-            setTimeout(() => {
+    updateHidingTimer = (props: ToastContainerProps = this.props) => {
+        clearTimeout(this.hidingTimer);
+        if (props.options.duration && props.options.duration > this.animationDuration) {
+            this.hidingTimer = setTimeout(() => {
                 this.hide();
-            }, this.props.options.duration - this.animationDuration);
+            }, props.options.duration - this.animationDuration);
         }
     }
 
+    componentWillReceiveProps(props: ToastContainerProps) {
+        this.updateHidingTimer(props);
+    }
+
     hide = () => {
+        clearTimeout(this.hidingTimer);
         Animated.timing(this.state.positionBottom, {
             toValue: -this.state.height,
             duration: this.animationDuration,
             easing: Easing.elastic(1)
-        }).start();
+        }).start(() => Toast.hideById(this.props.id));
     }
 
     setHeight(event) {
@@ -68,7 +77,7 @@ export default class ToastContainer extends React.Component<ToastContainerProps,
     }
 
     render() {
-        const { message, id } = this.props;
+        const { message } = this.props;
         const containerStyle = StyleSheet.flatten([styles.container, this.config.containerStyle, this.props.options.containerStyle]);
         const textMessageStyle = StyleSheet.flatten([styles.message, this.config.textStyle, this.props.options.textStyles]);
         return (
@@ -85,9 +94,6 @@ export default class ToastContainer extends React.Component<ToastContainerProps,
                         onPress={() => {
                             if (this.props.options.closable) {
                                 this.hide();
-                                setTimeout(() => {
-                                    Toast.hideById(id);
-                                }, this.animationDuration);
                             }
                         }}>
                         <View style={styles.icon}>

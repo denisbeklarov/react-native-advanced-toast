@@ -4,8 +4,6 @@ import ToastContainer from './ToastContainer';
 import { ViewStyle, TextStyle } from 'react-native';
 import { ToastConfigurationHelper } from './config';
 
-console.disableYellowBox = true;
-
 export enum ToastTypes {
     PROGRESS = 'PROGRESS',
     ERROR = 'ERROR',
@@ -51,17 +49,20 @@ interface ToastSchedule {
     message: string;
     options: ToastOptions;
     type: ToastTypes;
+    toast?: Toast & RootSiblings;
 }
 
 function mergeOptions(options: ToastOptions): ToastOptions {
+    if (options && !(typeof options === 'object')) {
+        console.warn('Toast options must be an object');
+        return defaultOptions;
+    }
     return Object.assign({}, defaultOptions, options);
 }
 
 export default class Toast extends Component<any, any>  {
 
-    private static queue: Array<ToastSchedule> = [];
-
-    fallBackTimeout: any;
+    private static queue: Array<ToastSchedule & RootSiblings> = [];
 
     static configure(config: ToastConfiguration) {
         ToastConfigurationHelper.config = Object.assign({}, ToastConfigurationHelper.config, config);
@@ -71,9 +72,11 @@ export default class Toast extends Component<any, any>  {
      * Hides a given toast
      */
     static hide = (toast: Toast & RootSiblings) => {
+        if (!toast) {
+            return;
+        }
         setTimeout(() => {
             if (toast instanceof RootSiblings) {
-                clearTimeout(toast.fallBackTimeout);
                 toast.destroy();
                 Toast.removeScheduleFromQueue(toast.id);
                 if (Toast.queue.length > 0) {
@@ -89,30 +92,43 @@ export default class Toast extends Component<any, any>  {
      * Hides toast by its id
      */
     static hideById = (id: string) => {
-        const toast = Toast.queue.find(schedule => schedule.id === id);
-        if (!toast) {
-            console.warn('Toast not exists');
+        const scheduled = Toast.queue.find(schedule => schedule.id === id);
+        if (!scheduled) {
             return;
         }
-        Toast.hide(toast);
+        Toast.hide(scheduled.toast);
     }
 
     /**
      * Update current toast with a new message, type or other options
      */
-    static update = (toast: Toast & RootSiblings, message: string, type: ToastTypes, options?: ToastOptions) => {
-        if (options && !(typeof options === 'object')) {
-            console.warn('Toast options must be an object');
-            return;
+    static update = (toast: Toast & RootSiblings, message: string, options?: ToastOptions, type?: ToastTypes) => {
+        if (!toast) {
+            console.warn('Toast can not be undefined');
         }
-        const newOptions = Object.assign({}, defaultOptions, options);
-
-        if (toast instanceof RootSiblings) {
-            clearTimeout(toast.fallBackTimeout);
-            toast.update(<ToastContainer options={newOptions} message={message} id={toast.id} type={type}> </ToastContainer>);
-            Toast.addTimeout(toast, toast.type, options.duration);
+        let scheduled: ToastSchedule = Toast.queue.find(schedule => schedule.id === toast.id);
+        if (scheduled && scheduled.toast instanceof RootSiblings) {
+            scheduled.toast
+                .update(<ToastContainer options={mergeOptions(options)} message={message} id={scheduled.id} type={type || scheduled.type}>
+                </ToastContainer>);
+        } else if (scheduled && !scheduled.toast) {
+            scheduled.message = message;
+            scheduled.options = mergeOptions(options);
+            scheduled.type = type;
         } else {
-            console.warn(`Toast.update expected a \`RootSiblings\` instance as argument.\nBut got \`${typeof toast}\` instead.`);
+            console.warn(`Toast is not in the queue any more`);
+        }
+    }
+
+    /**
+     * Update toast with given id
+     */
+    static updateById = (id: string, message: string, options?: ToastOptions, type?: ToastTypes) => {
+        let scheduled: ToastSchedule = Toast.queue.find(schedule => schedule.id === id);
+        if (scheduled && scheduled.toast) {
+            Toast.update(scheduled.toast, message, options, type);
+        } else {
+            console.warn(`Toast is not in the queue any more`);
         }
     }
 
@@ -141,50 +157,28 @@ export default class Toast extends Component<any, any>  {
         Toast.queue = Toast.queue.filter(schedule => schedule.id !== id);
     }
 
-    private static addTimeout = (toast: Toast & RootSiblings, type: ToastTypes, duration: number) => {
-        switch (type) {
-            case ToastTypes.PROGRESS:
-                // destroy progress timeout if the progress lasts more then 60 seconds
-                toast.fallBackTimeout = setTimeout(() => {
-                    Toast.hide(toast);
-                }, 60000);
-                break;
-            default:
-                // do not autoclose if duration set to 0
-                if (duration) {
-                    setTimeout(() => Toast.hide(toast), duration);
-                }
-                break;
-        }
-
-    }
-
     private static addToQueue = (message: string, options?: ToastOptions, type: ToastTypes = ToastTypes.TEXT, id: string = 'default') => {
-        const newOptions = Object.assign({}, defaultOptions, options || {});
         const toastSchedule: ToastSchedule = {
             id: id,
             message: message,
-            options: newOptions,
+            options: mergeOptions(options),
             type: type
         };
-        Toast.queue.push(toastSchedule);
-        if (Toast.queue.length === 1) {
+        let scheduled = Toast.queue.find(schedule => schedule.id === id);
+        scheduled ? scheduled = Object.assign(scheduled, toastSchedule) : Toast.queue.push(toastSchedule);
+        if (Toast.queue.length === 1 && !Toast.queue[0].toast) {
             Toast.createToast(toastSchedule);
         }
     }
 
     private static createToast = (schedule: ToastSchedule) => {
-        if (schedule.options && !(typeof schedule.options === 'object')) {
-            console.warn('Toast options must be an object');
-            return;
-        }
         const toast = new RootSiblings(<ToastContainer
             options={schedule.options}
             message={schedule.message}
             id={schedule.id}
             type={schedule.type} />);
         toast.id = schedule.id;
-        Toast.addTimeout(toast, schedule.type, schedule.options.duration);
+        schedule.toast = toast;
         return toast;
     }
 
