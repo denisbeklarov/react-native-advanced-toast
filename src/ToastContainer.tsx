@@ -69,12 +69,13 @@ export default class ToastContainer extends React.Component<ToastContainerProps,
 
     render() {
         const { message, id } = this.props;
+        const containerStyle = StyleSheet.flatten([styles.container, this.config.containerStyle, this.props.options.containerStyle]);
         return (
             <Animated.View style={[{
                 bottom: this.state.appearing ? null : this.state.positionBottom,
                 top: this.state.appearing ? this.state.positionTop : null
             }]}>
-                <View style={styles.container} onLayout={(event) => {
+                <View style={containerStyle} onLayout={(event) => {
                     this.setHeight(event);
                 }}>
                     <TouchableOpacity
