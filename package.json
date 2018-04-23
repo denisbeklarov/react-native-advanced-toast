@@ -4,6 +4,7 @@
     "main": "./lib/Toast.js",
     "types": "./lib/Toast.d.ts",
     "license": "MIT",
+    "homepage": "https://github.com/denisbeklarov/react-native-advanced-toast",
     "dependencies": {
         "react-native-root-siblings": "^3.1.0"
     },
