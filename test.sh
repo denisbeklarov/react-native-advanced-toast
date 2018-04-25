@@ -1,6 +1,5 @@
 #!/bin/bash
-cd tests
-tsc
+cd tests && tsc
 cd ..
-./node_modules/.bin/mocha --require babel-register tests/tests/*.js 
+./node_modules/.bin/jest
 exit 0

@@ -1,6 +1,6 @@
 {
     "compilerOptions": {
-        "outDir": "./",
+        "outDir": "./tests",
         "target": "es2015",
         "module": "es2015",
         "moduleResolution": "node",
@@ -16,6 +16,10 @@
             "jest"
         ],
     },
+    "filesGlob": [
+        "./**/*.ts",
+        "./**/*.tsx"
+    ],
     "include": [
         "./*.tsx",
         "./*.ts"

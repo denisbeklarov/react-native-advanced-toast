@@ -1,6 +1,6 @@
 {
     "name": "react-native-advanced-toast",
-    "version": "0.2.0",
+    "version": "0.2.1",
     "main": "./lib/Toast.js",
     "types": "./lib/Toast.d.ts",
     "license": "MIT",
@@ -13,17 +13,15 @@
         "prepare": "npm run build",
         "test": "./test.sh"
     },
-    "directories":{
+    "directories": {
         "lib": "lib"
-    } ,
+    },
     "devDependencies": {
         "@types/chai": "^4.1.2",
-        "enzyme-adapter-react-16": "^1.1.1",
-        "react": "16.3.0-alpha.1",
         "@types/enzyme": "^3.1.9",
         "@types/jest": "^22.2.3",
         "@types/mocha": "^5.0.0",
-        "@types/react": "16.0.40",
+        "@types/react": "^16.3.12",
         "@types/react-dom": "^16.0.5",
         "@types/react-native": "0.52.16",
         "@types/sinon": "^4.3.1",
@@ -34,10 +32,13 @@
         "chai": "^4.1.2",
         "concurrently": "^3.5.1",
         "enzyme": "^3.3.0",
+        "enzyme-adapter-react-16": "^1.1.1",
         "jest": "^22.4.3",
         "jsdom": "^11.5.1",
         "mocha": "^5.1.0",
+        "react": "^16.3.2",
         "react-addons-test-utils": "^15.6.2",
+        "react-native": "^0.55.3",
         "react-native-mock-render": "^0.0.19",
         "react-scripts-ts": "^2.15.1",
         "rimraf": "^2.6.2",
@@ -46,6 +47,23 @@
         "typescript": "2.7.2"
     },
     "jest": {
-        "setupTestFrameworkScriptFile": "tests/tests/setupTests.js"
+        "automock": false,
+        "transformIgnorePatterns": [
+            "node_modules/(?!(jest-)?react-native|react-native-root-siblings|static-container|redux)"
+        ],
+        "setupFiles": [
+            "./tests/setup.js"
+        ],
+        "testRegex": "tests/.+\\.(test|spec).js$",
+        "coverageDirectory": "coverage",
+        "coverageReporters": [
+            "text-summary",
+            "html"
+        ],
+        "collectCoverageFrom": [
+            "tests/src/**/*.js",
+            "!tests/src/**/*.spec.js"
+        ],
+        "preset": "react-native"
     }
 }
