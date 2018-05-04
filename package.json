@@ -6,7 +6,9 @@
     "license": "MIT",
     "homepage": "https://github.com/denisbeklarov/react-native-advanced-toast",
     "dependencies": {
-        "react-native-root-siblings": "^3.1.0"
+        "react-native-advanced-toast": "^0.2.1",
+        "react-native-root-siblings": "^3.1.0",
+        "react-native-vector-icons": "^4.6.0"
     },
     "scripts": {
         "build": "rm ./lib/* && tsc",

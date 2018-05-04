@@ -4,3 +4,4 @@ lib/
 .vscode
 tests/tests
 tests/src
+Example/node_modules/

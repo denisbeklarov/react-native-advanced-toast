@@ -6,3 +6,4 @@ tsconfig.json
 .babelrc
 .gitignore
 *.tgz
+Example/
