@@ -7,6 +7,10 @@ Features:
 * Multiple types of notifications
 * Easy configuration
 
+## Demo
+
+![Demo Toasts](http://res.cloudinary.com/dfzdapo2m/image/upload/c_scale,h_532,q_100/v1525423107/toast_demo_jiyecc.gif)
+
 ## Installation
 ```
 npm install react-native-advanced-toast
@@ -21,7 +25,7 @@ import Toast from 'react-native-advanced-toast';
 
 ```
 Toast.configure({
- 	  animationTime?: number;
+    animationTime?: number;
     renderInfoIcon?: () => JSX.Element;
     renderSuccessIcon?: () => JSX.Element;
     renderWarningIcon?: () => JSX.Element;
@@ -52,15 +56,15 @@ Toast.showInfo('My toast message', {...options}, 'customId');
 ```
 Possible options:
 ```
- 	  duration?: number;
-    closable?: boolean;
-    textProps?: TextStyle;
-    containerStyle?: ViewStyle;
-    actionButtonText?: string;
-    actionButtonStyle?: ViewStyle;
-    actionButtonTextStyle?: TextStyle;
-    actionButtonOnPress?: () => any;
-    renderCustomIcon?: () => JSX.Element;
+duration?: number;
+closable?: boolean;
+textProps?: TextStyle;
+containerStyle?: ViewStyle;
+actionButtonText?: string;
+actionButtonStyle?: ViewStyle;
+actionButtonTextStyle?: TextStyle;
+actionButtonOnPress?: () => any;
+renderCustomIcon?: () => JSX.Element;
 ```
 
 ## Hide toast manually
